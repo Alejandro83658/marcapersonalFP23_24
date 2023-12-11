@@ -123,6 +123,7 @@ Route::prefix('docentes')->group(function () {
     Route::get('/edit/{id}', [DocenteController::class, 'getEdit'])->where('id', '[0-9]+');
 
     Route::put('/edit/{id}', [DocenteController::class, 'putEdit'])->where('id', '[0-9]+');
+
 });
 
 Route::get('perfil/{id?}', function ($id = null) {
@@ -132,3 +133,16 @@ Route::get('perfil/{id?}', function ($id = null) {
         return "Visualizar el currículo de " . $id;
     }
 })->where('id', '[0-9]+')->name('perfil');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+     });
+     require __DIR__.'/auth.php';
+
+
